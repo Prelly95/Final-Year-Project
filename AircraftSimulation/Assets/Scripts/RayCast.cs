@@ -79,7 +79,8 @@ public class RayCast : MonoBehaviour
 
 		for (int ii = 0; ii < numberOfRays; ii++)
 		{
-			for (int jj = 0; jj < numberOfRays; jj++)
+            lidarStream.Write("{0}", count);
+            for (int jj = 0; jj < numberOfRays; jj++)
 			{
 				if (Physics.Raycast(transform.position, transform.rotation * dir[ii, jj], out hit, Mathf.Infinity))
 				{
@@ -87,31 +88,31 @@ public class RayCast : MonoBehaviour
                     if(debug) {
                         Debug.DrawRay(transform.position, transform.rotation * dir[ii, jj] * hit.distance, Color.green);
                     }
-                    lidarData = string.Format("{0}\t{1}", count, hit.distance);
-					lidarStream.WriteLine(lidarData);
+                    lidarData = string.Format("\t{0}", hit.distance);
 				}
 				else
 				{
                     if(debug) {
                         Debug.DrawRay(transform.position, transform.rotation * dir[ii, jj] * 1000, Color.red);
                     }
-                    lidarData = string.Format("{0}\t{1}", count, 0);
-					lidarStream.WriteLine(lidarData);
+                    lidarData = string.Format("\t{0}", 0);
 				}
-			}
-		}
-		count++;
+                lidarStream.Write(lidarData);
+            }
+            lidarStream.WriteLine("");
+        }
+        count++;
 
-		transVelocity = UAVrb.velocity;
+		transVelocity = transform.InverseTransformDirection(UAVrb.velocity);
 		rotVelocity = UAVrb.angularVelocity;
         pose = UAVrb.transform.eulerAngles;
 
-		tVelocityData = string.Format("{0}\t{1}\t{1}", transVelocity.x, transVelocity.y, transVelocity.z);
-		aVelocityData = string.Format("{0}\t{1}\t{1}", rotVelocity.x, rotVelocity.y, rotVelocity.z);
+		tVelocityData = string.Format("{0}\t{1}\t{2}", transVelocity.x, transVelocity.y, transVelocity.z);
+		aVelocityData = string.Format("{0}\t{1}\t{2}", rotVelocity.x, rotVelocity.y, rotVelocity.z);
         poseData = string.Format("{0}\t{1}\t{2}", pose.x, pose.y, pose.z);
 
         if(debug) {
-            Debug.Log(pose);
+            Debug.Log(aVelocityData);
         }
 
         //write the data to text files

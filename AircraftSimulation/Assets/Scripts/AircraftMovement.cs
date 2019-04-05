@@ -48,27 +48,27 @@ public class AircraftMovement : MonoBehaviour {
         }
 
         if(Input.GetKey("a")) {
+            rudderL += 0.1f;
+        } else {
+            rudderL = 0;
+        }
+        
+        if(Input.GetKey("d")) {
+            rudderR += 0.1f;
+        } else {
+            rudderR = 0;
+        }
+
+        if(Input.GetKey("z")) {
             AileronL += 0.1f;
         } else {
             AileronL = 0;
         }
 
-        if(Input.GetKey("d")) {
+        if(Input.GetKey("x")) {
             AileronR += 0.1f;
         } else {
             AileronR = 0;
-        }
-
-        if(Input.GetKey("z")) {
-            rudderL += 0.1f;
-        } else {
-            rudderL = 0;
-        }
-
-        if(Input.GetKey("x")) {
-            rudderR += 0.1f;
-        } else {
-            rudderR = 0;
         }
     }
 	void FixedUpdate() {
