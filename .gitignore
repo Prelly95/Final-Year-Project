@@ -156,6 +156,7 @@ Desktop.ini
 #################
 ## Other
 #################
+DataCollection/
 environment.config
 *.log
 *.log.?
