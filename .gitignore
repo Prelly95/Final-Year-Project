@@ -157,6 +157,7 @@ Desktop.ini
 ## Other
 #################
 DataCollection/
+UnityData/
 environment.config
 *.log
 *.log.?
