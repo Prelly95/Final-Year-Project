@@ -25,7 +25,7 @@ public class AircraftMovement : MonoBehaviour {
 
     void Start() {
 		rb = GetComponent<Rigidbody> ();
-        rb.drag = Mathf.Epsilon;
+        rb.drag = 1;
     }
 
 	void Update()
@@ -86,11 +86,11 @@ public class AircraftMovement : MonoBehaviour {
 
         float angleOfAttack   = Mathf.Atan2(-localVel.y, localVel.z);
 		float liftCoeff = lc0 + 2*Mathf.PI*angleOfAttack;
-		float drag = (0.5f) * Mathf.Abs(roh) * Mathf.Abs(dragCoeff) * vel.sqrMagnitude;
+		//float drag = (0.5f) * Mathf.Abs(roh) * Mathf.Abs(dragCoeff) * vel.sqrMagnitude;
         float lift = (0.5f) * Mathf.Abs(roh) * liftCoeff * vel.sqrMagnitude;
 
-        rb.AddForce(thrustDirection	* thrust);
-        rb.AddForce(dragDirection * drag);
+        rb.AddForce(thrustDirection * thrust);
+        //rb.addforce(dragdirection * drag);
         rb.AddForce(liftDirection	* lift);
     }
 

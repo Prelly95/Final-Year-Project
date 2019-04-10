@@ -7,7 +7,6 @@ rQC = eta;
 
 if(M == 0)
     rhoPC = 0;
-%     rQC = [0;0;0];
 else
     rhoPC = 1/norm(rQC*M);
 end

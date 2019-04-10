@@ -1,6 +1,6 @@
-function dir = easySphere(roh, FOV, thX, thY, thZ)
+function dir = easySphere(rohX, rohY, FOV, thX, thY, thZ)
 
-dir = zeros(3, roh, roh);
+dir = zeros(3, rohX, rohY);
 
 thX = deg2rad(thX);
 thY = deg2rad(thY);
@@ -20,11 +20,11 @@ Rz = [   cos(thZ),    -sin(thZ),    0
 
 R = Rx*Ry*Rz;
 
-for ii = 1:roh
-    for jj = 1:roh
+for ii = 1:rohX
+    for jj = 1:rohY
         
-        theta = jj * ((FOV) / (roh - 1)) - FOV/2;
-        phi = ii * ((FOV) / (roh - 1)) + FOV/2;
+        theta = jj * ((FOV) / (rohX - 1)) - FOV/2;
+        phi = ii * ((FOV) / (rohY - 1)) + FOV/2;
 
         dir(:, ii, jj) = [  cos(theta) * cos(phi);
                             cos(theta) * sin(phi);
