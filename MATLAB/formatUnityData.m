@@ -7,7 +7,7 @@ while lidarData(ii, 1) == 0
 end
 param.resY = ii-1;
 
-param.frames = min([length(kinematicData), floor(length(lidarData)/param.resY)]);
+param.frames = min([length(kinematicData), floor(length(lidarData)/param.resY)]) - 1;
 Map = zeros(param.frames, param.resX, param.resY);
 
 for ii = 1:param.frames

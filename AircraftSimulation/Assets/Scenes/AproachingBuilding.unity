@@ -124,9 +124,10 @@ GameObject:
   - component: {fileID: 404609707}
   - component: {fileID: 404609706}
   - component: {fileID: 404609705}
+  - component: {fileID: 404609709}
   - component: {fileID: 404609704}
   - component: {fileID: 404609703}
-  - component: {fileID: 404609709}
+  - component: {fileID: 404609710}
   m_Layer: 0
   m_Name: Vehicle
   m_TagString: Untagged
@@ -232,7 +233,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 404609702}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 30, z: -40}
+  m_LocalPosition: {x: 5.83, y: 30, z: -40}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1880950323}
@@ -255,6 +256,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &404609710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 404609702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57a52f8ab425edc469fab99af4fd244c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  saveFrames: 1
 --- !u!1 &435611166
 GameObject:
   m_ObjectHideFlags: 0

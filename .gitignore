@@ -426,7 +426,6 @@ TSWLatexianTemp*
 ## Other
 #################
 DataCollection/
-UnityData/
 [Ff]rames/
 environment.config
 *.log

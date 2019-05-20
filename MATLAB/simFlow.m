@@ -2,29 +2,38 @@ clc;
 clear;
 close all;
 
-
+%% Setup
+% Data for Simulation
 lidarData = dlmread("UnityData/lidar.txt");
 kinematicData = dlmread("UnityData/velocity.txt");
 
 [nu, Map, param] = formatUnityData(lidarData, kinematicData);
 eta = easySphere(param.resX, param.resY, pi/2, 0, 90, 90); %Rotates into unity co-ordinates
-
+%Define Parameters
 N = length(eta(1, :));
 params.N = N;
 sigmaR = 50;
-
 target = [0, 0, 1];
-
-param.frames = length(kinematicData) - 1;
 
 u	= zeros(param.frames, param.resX, param.resY);
 v	= zeros(param.frames, param.resX, param.resY);
 w	= zeros(param.frames, param.resX, param.resY);
 
-
 flowMag = zeros(param.resX, param.resY);
 targetCost = zeros(param.resX, param.resY);
 movement = zeros(3, param.frames);
+
+% frames collected from unity
+frameDir = '.\UnityData\frames';
+filePattern = fullfile(frameDir, '*.png');
+fileNames = dir(filePattern);
+frameArray = cell(1, N);
+
+% for ii = 1:param.frames
+%     baseFileName = fileNames(ii).name;
+%     fullFileName = fullfile(frameDir, baseFileName);
+%     frameArray{ii} = imread(fullFileName);
+% end
 
 %calculate optic flow
 for ii = 1:param.frames
@@ -55,17 +64,17 @@ end
 
 %% plot the actual data
 [a, b, c] = sphere(100);
-imageFiled
-for ii = 1:param.frames
-    curentImage = imread('UnityData/frames/*.png');
-    img{ii} = curentImage;
-end
+img = imread('UnityData/frames/000001.png');
+% for ii = 1:param.frames
+%     curentImage = imread('UnityData/frames/*.png');
+%     img{ii} = curentImage;
+% end
 
 % setting up the plot
 figure();
 
 subplot(1, 2, 1);
-title("Sim Flow New");
+title("Predicted Optical Flow");
 hold on;
 grid on;
 view([180, -90]);
@@ -82,7 +91,7 @@ flowPlot = quiver3(eta(1, :, :), eta(2, :, :), eta(3, :, :), zeros(1, 30, 30), z
 directionPlot = plot3(0, 0, 1, 'rx'); % Target Direction
 
 subplot(1, 2, 2);
-imagePlot = image([axismin, axismax], [-axismin, -axismax], img);
+imagePlot = image([axismin, axismax], [axismin, axismax], img);
 imagePlot.AlphaData = 0.3;
 daspect([1,1,1]);
 
@@ -97,7 +106,7 @@ for ii = 1:(param.frames)
                 'ydata', movement(2, ii),...
                 'zdata', movement(3, ii) ...
        );
-   set(imagePlot, 'CData', img);
+%    set(imagePlot, 'CData', img);
     disp(ii);
     pause(0.02);
 end
