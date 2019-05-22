@@ -26,15 +26,14 @@ for ii = 1:rohX
         theta = jj * ((FOV) / (rohX - 1)) - FOV/2;
         phi = ii * ((FOV) / (rohY - 1)) + FOV/2;
 
-        dir(:, ii, jj) = [  cos(theta) * cos(phi);
+        x = [  cos(theta) * cos(phi);
                             cos(theta) * sin(phi);
                             -sin(theta);
                          ];
         
-        dir(:, ii, jj) = R*dir(:, ii, jj);
+        dir(:, ii, jj) = R*x;
     end
 end
 
 % figure;
-% plot3(x, y, z, '.');
-% view([0, 0]);
+% quiver3(zeros(30), zeros(30), zeros(30), dir(:, :, 1), dir(:, :, 2), dir(:, :, 3), '.');

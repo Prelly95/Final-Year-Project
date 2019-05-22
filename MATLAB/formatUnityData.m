@@ -8,12 +8,12 @@ end
 param.resY = ii-1;
 
 param.frames = min([length(kinematicData), floor(length(lidarData)/param.resY)]) - 1;
-Map = zeros(param.frames, param.resX, param.resY);
+Map = zeros(param.resX, param.resY, param.frames);
 
 for ii = 1:param.frames
     for jj = 1:param.resX
         for kk = 1:param.resY
-            Map(ii, kk, (param.resX+1)-jj) = lidarData((ii-1)*param.resX + jj, kk+1);
+            Map(kk, (param.resX+1)-jj, ii) = lidarData((ii-1)*param.resX + jj, kk+1);
         end
     end
 end
