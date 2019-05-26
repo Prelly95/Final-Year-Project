@@ -101,6 +101,7 @@ Exploring and navagating unknown environments is an essential instinct in biolog
 The rest of the report is organised as follows. Section~\ref{sec:Background} describes items related to the core content. Section~\ref{sec:Conclusion} concludes the report. Appendix~ shows an example of how to make a Table.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<<<<<<< HEAD
 \newpage
 \section{Background}\label{sec:Background}
 %TODO: Pretty good, get someone to read
@@ -114,11 +115,27 @@ The following section builds the knowledge needed to utelise cameras as sensor i
 
 \subsubsection{Biomimicry} % 1 page
 Biology so often holds a welth of inspiration for engineers. From the material science of the microstructures in a butterfly wing to the computational fluid dynamics of a Kingfisher diving into water \citep{benyus1997biomimicry}.
+=======
+\section{Background}\label{sec:Background}
+%TODO: Pretty good, get someone to read
+To the average human or most mammals for that matter, visual tasks such as identifying objects and interpreting visual cues seem like a trivial task. However, implementing algorithms that mimic a mammalian visual cortex is infuriatingly difficult and largely remains an unsolved problem \citep{hartley2003multiple}. One fact often forgotten is that for all of its amazing abilities approximately 1/3 of the human brain is dedicated to analysing the information collected from our eyes. This statistic helps to put into perspective how challenging the field of computer vision can be.
+
+%TODO: From part A Fix this up
+The concept of computer vision has been explored since the inception of artificial intelligence in the late 1960’s. Researchers the goal of extracting the 3-Dimensional structure of a scene from images. The following decade saw research attempting to extract more information from a sequence of images using visual cues from the motion of a camera. This brought about work on visual navigation as a viable method to navigate an environment. Using Visual Navigation on a robot to move through an unstructured environment with no prior knowledge of the map is often based on optical flow (Altshuler and Srinivasan, 2018), where a motion field is estimated from fusing the motion of the robot with the motion of the pixels of a video feed. Furthermore, biologically inspired visual navigation techniques have been a topic for research. By observing the way that animals and insects utilise their visual systems to move about and map their environments, the processes for which this is achieved can be replicated and used on a robotic system for similar tasks. This section outlines the planar and spherical model of optical flow, the tools used to infer motion between frames, and how honeybees use Visual Navigation (Srinivasan, 2011).
+\subsection{Biological Inspiration} % 1 page
+>>>>>>> a1eff1b0054fd4f34e03a0a897e1fb93159f4de8
 \subsubsection{Visual Navigation}
 \subsubsection{Sudo Control Algorithm for Insects}
 \subsubsection{}
+<<<<<<< HEAD
 \subsection{Optical Flow} % 2 pages %TODO: From part A Fix this up
 In computer vison we are constanly running into the problem of dimentional compression. A lot of information is lost in the projection from 3 dimentions to a 2D plane, and when that projection is inverted, the lost data needs to be inferred. In the case of optical flow, the lost data comes mainly from different assumptions that are made to make the optic flow algorithm solvable. Each Optical flow algorithm has its own set of assumptions and constraints
+=======
+\subsubsection{}
+\subsection{Optical Flow} % 2 pages %TODO: From part A Fix this up
+Optical flow has featured in many industrial projects and applications, these industries include but are not limited to robotics and computer vision, filmmaking and video compression. Filmmakers and the film industry use optical flow to track targets, augment the colour and texture of objects and add 3D effects to a preshot scene. A major part of optical flow reasearch is in motion estimation for video compression. This is a technique that uses a predivtive and interpolative encoding based on the optical flow motion field \citep{le1991MPEG}. %TODO:Something about the robotics industry
+There have been many methods proposed to calculate the optical flow between sequential frames with varying levels of success. Depending on the goal 
+>>>>>>> a1eff1b0054fd4f34e03a0a897e1fb93159f4de8
 \subsubsection{Horn \& Schunk} %TODO: From part A Fix this up
 Optical flow is an ill-posed problem, meaning that there is only one independent measurement available from the image sequence and we require 2 variables to describe the flow at a point. B.K.P. Horn and B.G. Schunck developed an algorithm for computing optical flow in 1980 \citep{horn1981determining} by adding a second constraint known as the brightness constancy. The brightness constancy constraint assumes that the pixel intensities remain constant over time.
 
@@ -141,6 +158,10 @@ Pose rate estimation
 	\item suggest future work or improvements.
 \end{itemize}
 
+<<<<<<< HEAD
+=======
+\newpage
+>>>>>>> a1eff1b0054fd4f34e03a0a897e1fb93159f4de8
 \subsection{Camera Calibration} %TODO: Pretty good, get someone to read
 Computer vision begins with the camera detecting light from a scene. This light has travelled from its source, reflecting from an object, through the camera lens and is recorded on the image sensor. For these rays of light that make up an image to be useful for representing the real-world, we must understand the geometry that transforms these rays from the three-dimensional real world to a two-dimensional image plane i.e. world coordinates to image coordinates.
 
@@ -183,7 +204,11 @@ Due to how light enters the camera, the image projection from a pinhole model is
 \caption{Ideal camera model. A point $P$ in camera co-ordinates \{$\vec{c_{1}}, \vec{c_{2}}, \vec{c_{3}}$\} is projected and displayed as a point $p$ in image co-ordinates \{$\vec{u}, \vec{v}$\}}
 \label{fig:PlainarModel}
 \end{figure}
+<<<<<<< HEAD
 The idea behind modeling and calibrating a camera is to identify and cancel out imperfections caused by slight defects in the manufacturing process. Firstly, the image sensor is often mounted askew from the optical center of the lense. Therefor, we introduce $\alpha_{x}$ and $\alpha_{x}$ to model a displacement from the optical centre. Furthermore, each pixel is not necessarily square causing a small discrepancy between the focal lenght in the $\vec{u}$ and $\vec{v}$ directions, captured in the $f_{u}$ and $f_{v}$ parameters. The following equations~\ref{eq:ProjectionEquations} project a point $P_{c_{1}, c_{2}, c_{3}}$ to image sensor co-ordinates $u, v$:
+=======
+The idea behind modeling and calibrating a camera is to identify and cancel out imperfections caused by slight defects in the manufacturing process. Firstly, the image sensor is often notmounted inlign with the optical center of the lense. Therefor, we introduce $\alpha_{x}$ and $\alpha_{x}$ to model a displacement from the optical centre. Furthermore, each pixel is not necessarily square causing a small discrepancy between the focal lenght in the $\vec{u}$ and $\vec{v}$ directions, captured in the $f_{u}$ and $f_{v}$ parameters. The following equations~\ref{eq:ProjectionEquations} project a point $P_{c_{1}, c_{2}, c_{3}}$ to image sensor co-ordinates $u, v$:
+>>>>>>> a1eff1b0054fd4f34e03a0a897e1fb93159f4de8
 \begin{equation*}\label{eq:ProjectionEquations}
 	\begin{split}
 		u = &f_{u} \times \frac{\vec{c_{1}}}{\vec{c_{3}}} + \alpha_{u}\\
@@ -191,8 +216,18 @@ The idea behind modeling and calibrating a camera is to identify and cancel out 
 	\end{split}
 \end{equation*}
 \subsubsection{Homogenius Coordinates}
+<<<<<<< HEAD
 
 \subsubsection{Lens Distortion}
+=======
+
+\subsubsection{Lens Distortion}
+
+\subsection{Inverse Optimal Control} % 3 pages
+\subsubsection{Sudo Control Algorithm for Insects}
+\subsubsection{}
+\subsection{Divergence}
+>>>>>>> a1eff1b0054fd4f34e03a0a897e1fb93159f4de8
  
 \subsection{Approach}
 \subsubsection{Inverse Depth Calculation}
