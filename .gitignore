@@ -1,7 +1,12 @@
+###### Captured Gopro Data #######
+Calibration_frames/
+MATLAB/Finished/GoProData/*.mp4
+
 ############# MATLAB #############
 # Windows default autosave extension
 *.asv
-
+ofCalc130.mat
+ofCalc550.mat
 # OSX / *nix default autosave extension
 *.m~
 
@@ -37,7 +42,8 @@ octave-workspace
 [Oo]bj/
 [Bb]uild/
 [Bb]uilds/
-Assets/AssetStoreTools*
+AircraftSimulation/Assets/AssetStoreTools*
+AircraftSimulation/Assets/UI
 
 # Visual Studio cache directory
 .vs/
@@ -434,3 +440,5 @@ environment.config
 node_modules/
 .bin/
 *.nupkg
+
+

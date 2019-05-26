@@ -118,6 +118,8 @@ public class RayCast : MonoBehaviour
         //write the data to text files
         poseStream.WriteLine(Time.time + "\t" + poseData);
         velocityStream.WriteLine(Time.time + "\t" + tVelocityData + "\t" + aVelocityData);
+
+        Time.timeScale = 0;
     }
 
     void OnApplicationQuit()
