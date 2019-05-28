@@ -5,10 +5,12 @@ using System.Text;
 
 public class RayCast : MonoBehaviour
 {
-	static float FOV = Mathf.PI / 2F;
-	static int numberOfRays = 30;
-	int count = 0;
-	Vector3[,] dir = new Vector3[numberOfRays, numberOfRays];
+    static float fovX = 100 * Mathf.PI/180f;
+    static float fovY = ((100 * Mathf.PI / 180f) * 9 )/ 16;
+    static int rX = 160;
+    static int rY = 90;
+    int count = 0;
+	Vector3[,] dir = new Vector3[rX, rY];
 
 	//Data Capture directory
 	static DirectoryInfo currentDir = new DirectoryInfo(".");
@@ -30,8 +32,9 @@ public class RayCast : MonoBehaviour
 	public Rigidbody UAVrb;
 
     public bool debug = true;
+    public bool frameByFrame = false;
 
-	void Start()
+    void Start()
 	{
 		if (!Directory.Exists(dataPath))
 		{
@@ -50,12 +53,12 @@ public class RayCast : MonoBehaviour
 		poseStream = File.CreateText(poseFilePath);
 		velocityStream = File.CreateText(velocityFilePath);
 
-		for (int ii = 0; ii < numberOfRays; ii++)
+		for (int ii = 1; ii < rX; ii++)
 		{
-			for (int jj = 0; jj < numberOfRays; jj++)
+			for (int jj = 1; jj < rY; jj++)
 			{
-				float theta = jj * ((FOV) / (numberOfRays - 1)) - FOV / 2;
-				float phi = ii * ((FOV) / (numberOfRays - 1)) + FOV / 2;
+				float theta = jj * ((fovY) / (rY)) - fovY/2;
+				float phi   = ii * ((fovX) / (rX)) + (Mathf.PI / 2 - fovX / 2);
 
 				dir[ii, jj].x = Mathf.Cos(theta) * Mathf.Cos(phi);
 				dir[ii, jj].z = Mathf.Cos(theta) * Mathf.Sin(phi);
@@ -77,10 +80,10 @@ public class RayCast : MonoBehaviour
 
         RaycastHit hit;
 
-		for (int ii = 0; ii < numberOfRays; ii++)
+		for (int ii = 0; ii < rX; ii++)
 		{
             lidarStream.Write("{0}", count);
-            for (int jj = 0; jj < numberOfRays; jj++)
+            for (int jj = 0; jj < rY; jj++)
 			{
 				if (Physics.Raycast(transform.position, transform.rotation * dir[ii, jj], out hit, Mathf.Infinity))
 				{
@@ -118,8 +121,10 @@ public class RayCast : MonoBehaviour
         //write the data to text files
         poseStream.WriteLine(Time.time + "\t" + poseData);
         velocityStream.WriteLine(Time.time + "\t" + tVelocityData + "\t" + aVelocityData);
-
-        Time.timeScale = 0;
+        if(frameByFrame)
+        {
+            Time.timeScale = 0;
+        }
     }
 
     void OnApplicationQuit()

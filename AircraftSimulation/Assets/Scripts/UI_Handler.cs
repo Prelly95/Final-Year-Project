@@ -7,7 +7,7 @@ public class UI_Handler : MonoBehaviour
     
     void Update()
     {
-        if (Input.GetKeyUp("n"))
+        if (Input.GetKey("n"))
         {
             step();
         }

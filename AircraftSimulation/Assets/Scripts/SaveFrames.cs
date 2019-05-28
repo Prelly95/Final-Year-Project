@@ -6,7 +6,7 @@ public class SaveFrames : MonoBehaviour
 {
     string folder = "frames";
     int frameCount;
-    public bool saveFrames = true;
+    public bool saveFrames = false;
 
     // Start is called before the first frame update
     void Start()

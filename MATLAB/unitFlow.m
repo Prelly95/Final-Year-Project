@@ -22,17 +22,17 @@ rPC(1, :) = x;
 rPC(2, :) = y;
 rPC(3, :) = z;
 
-vCN = [0; 0; 0]; % Velocity of the camera in world coordinates
+vCN = [1; 0; 0]; % Velocity of the camera in world coordinates
 omegaBN = [0; 0; 0]; % angular velocity of the camera in the world coordinates
 
 for jj = 1:N
-    [u(jj),  v(jj), w(jj)] = MeasurementModel(rPC(:, jj), vCN(:), omegaBN(:));
+    G(:, jj) = MeasurementModel([vCN;omegaBN], rPC(:, jj), 1);
 end
 
 figure;
 hold on;
 grid on;
-quiver3(x, y, z, u, v, w);
+quiver3(x, y, z, G(1, :), G(2, :), G(3, :));
 trisurf(TRI, x, y, z, 'edgecolor', 'none', 'facecolor', '[0.8, 0.8, 0.8]', 'FaceAlpha', '0.8');
 view([40, 20]);
 title("Unit Surge");

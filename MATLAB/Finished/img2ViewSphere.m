@@ -4,8 +4,8 @@ close all;
 
 sR = 10; % Scale Ratio, speeds up plotting
 
-cropX = 1;
-cropY = 1;
+cropX = 0;
+cropY = 0;
 
 VideoFile = 'GoProData/Static_Scene.MP4';
 v = VideoReader(VideoFile);
@@ -26,15 +26,15 @@ param.camResY = v.Height;
 param.camMatrix = camMatrix;
 param.distVec = distVector6;
 
-param.fovX = 2.0630;
-param.fovY = 1.2130;
+param.fovX = deg2rad(100);%2.0630;
+param.fovY = deg2rad(100*9/16);%1.2130;
 
-[X, Y] = meshgrid(cropX:sR:v.Width-cropX, cropY:sR:v.Height-cropY);
+[X, Y] = meshgrid(1+cropX:sR:v.Width-cropX, 1+cropY:sR:v.Height-cropY);
 
 % Gathering colour data for undistorted points
-r(:, :) = double(frame(cropX:sR:end-cropX, cropY:sR:end-cropY, 1))/255;
-g(:, :) = double(frame(cropX:sR:end-cropX, cropY:sR:end-cropY, 2))/255;
-b(:, :) = double(frame(cropX:sR:end-cropX, cropY:sR:end-cropY, 3))/255;
+r(:, :) = double(frame(1+cropX:sR:end-cropX, 1+cropY:sR:end-cropY, 1))/255;
+g(:, :) = double(frame(1+cropX:sR:end-cropX, 1+cropY:sR:end-cropY, 2))/255;
+b(:, :) = double(frame(1+cropX:sR:end-cropX, 1+cropY:sR:end-cropY, 3))/255;
 
 cd(:, :, :) = [r(:), g(:), b(:)];
 

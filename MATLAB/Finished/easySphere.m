@@ -7,7 +7,8 @@ thZ = camAngle(3);
 resX = params.resX;
 resY = params.resY;
 
-FOV = params.FOV;
+fovX = params.fovX;
+fovY = params.fovY;
 
 dir = zeros(3, resX, resY);
 
@@ -32,8 +33,8 @@ R = Rx*Ry*Rz;
 for ii = 1:resX
     for jj = 1:resY
         
-        theta = jj * ((FOV) / (resY - 1)) - FOV/2;
-        phi = ii * ((FOV) / (resX - 1)) + FOV/2;
+        phi = ii * (fovX/(resX-1)) + (pi/2 - fovX/2);
+        theta = jj * (fovY/(resY-1)) - fovY/2;
 
         x = [  cos(theta) * cos(phi);
                             cos(theta) * sin(phi);
