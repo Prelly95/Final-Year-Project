@@ -5,6 +5,7 @@ MATLAB/Finished/GoProData/*.mp4
 ############# MATLAB #############
 # Windows default autosave extension
 *.asv
+*.mat
 ofCalc130.mat
 ofCalc550.mat
 # OSX / *nix default autosave extension

@@ -1,6 +1,9 @@
-function Div = divergence_sphere(X, Y, Z)
+function Div = divergence_sphere(hx, hy, u, v)
 
-dx = diff(X);
-dy = diff(Y);
-dz = diff(Z);
-Div = dx + dy + dz;
+u = double(u);
+u = double(u);
+
+[px, ~] = gradient(u, hx, hy); 
+[~, qy] = gradient(v, hx, hy); 
+
+Div = px + qy;
