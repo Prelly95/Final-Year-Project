@@ -18,7 +18,6 @@ camJson = jsondecode(fileread(camFile));
 camTemp = camJson.M;
 camMatrix = reshape(camTemp, 3, 3);
 
-%%
 if(~exist('cameraParams', 'var'))
     try
         load('CameraParameters_GoPro.mat');
@@ -41,14 +40,14 @@ if(~exist('cameraParams', 'var'))
 end
 % paramStruct  = cameraParams.toStruct;
 
-%%
+%% Gathering colour data for undistorted points
 rDist = cameraParams.RadialDistortion;
 tDist = cameraParams.TangentialDistortion;
 
 distVector3 = [rDist(1:2), tDist, rDist(3)];
 
 
-%% Gathering colour data for undistorted points
+
 r(:, :) = double(frame(1:sR:end, 1:sR:end, 1))/255;
 g(:, :) = double(frame(1:sR:end, 1:sR:end, 2))/255;
 b(:, :) = double(frame(1:sR:end, 1:sR:end, 3))/255;
@@ -87,3 +86,15 @@ sp2.Position = [0.48 0.200 0.48 0.6];
 imshow(frame, 'parent', sp2);
 title("Original Image");
 
+
+%%
+figure;
+axis([200, 3600, 100, 2100]);
+[X, Y] = meshgrid(200:50:v.Width-200, 200:50:v.Height-200);
+[xd6, yd6] = undistortPoint_mex(X(:), Y(:), camMatrix, distVector6);
+quiver(X(:), Y(:), X(:)-xd6, Y(:)-yd6, 2  );
+hold on;
+plot(X(:), Y(:), '.');
+title('Radial and tangental distortion of GoPro Hero 7');
+xlabel('u');
+ylabel('v');

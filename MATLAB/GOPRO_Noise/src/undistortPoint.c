@@ -24,24 +24,7 @@ void undistortCorners(double *xOut, double *yOut, double *xIn, double *yIn, vari
 
 	p[0] = cameraDistortion[P1];
 	p[1] = cameraDistortion[P2];
-
-	// mexPrintf("fx %f\n", fx);
-	// mexPrintf("fy %f\n\n", fy);
-
-	// mexPrintf("cx %f\n", cx);
-	// mexPrintf("cy %f\n\n", cy);
-
-	// mexPrintf("k1 %f\n ", k[0]);
-	// mexPrintf("k2 %f\n ", k[1]);
-	// mexPrintf("k3 %f\n ", k[2]);
-	// mexPrintf("k4 %f\n ", k[3]);
-	// mexPrintf("k3 %f\n ", k[4]);
-	// mexPrintf("k6 %f\n\n ", k[5]);
-
-	// mexPrintf("p1 %f\n ", p[0]);
-	// mexPrintf("p2 %f\n\n ", p[1]);
-	// return;
-
+	
 	for(ii = 0; ii < n; ii++)
 	{
 		double x = (xIn[ii] - cx) / fx;

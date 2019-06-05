@@ -125,7 +125,7 @@ Beginning with a basic description of optical flow. Optical flow is the apparent
     \end{center}
 \end{figure}
 
-Many optical flow algorithms rely on the derivative of an image. More specifically how does the pixel intensity change from one pixel to the next: This is known as the \textit{image gradient}. Due to the intensity of an image only being defined in discrete locations, an assumption of some underlying continuous intensity function needs to be made. similar to the traditional definition of derivatives, the image gradient is separable. To calculate the partial derivatives if an image, an \textit{image kernal} is designed to capture the change intensity along each particular dimension. Optical flow requires the image gradient in $x, y$ and $t$, \cref{eq:ImageKernals} are the image kernels for these directions.
+Many optical flow algorithms rely on the derivative of an image. More specifically how does the pixel intensity change from one pixel to the next: This is known as the \textit{image gradient}. Due to the intensity of an image only being defined in discrete locations, an assumption of some underlying continuous intensity function needs to be made. similar to the traditional definition of derivatives, the image gradient is separable. To calculate the partial derivatives if an image, an \textit{image kernal} is designed to capture the change intensity along each particular dimension. Optical flow requires the image gradient in $x, y$ and $t$. \Cref{eq:ImageKernals} show the image kernels for these directions.
 
 \begin{equation}\label{eq:ImageKernals}
 	\frac{\delta I}{\delta x} = 
@@ -166,7 +166,7 @@ Defining a vector field $\mathbf{h} = (u, v) = \left(\frac{du}{dt}, \frac{dv}{dt
 	\nabla I \mathbf{h} + I_{t} = 0
 \end{equation}
 
-This equation exposes the aperture problem in \ref{fig:ApertureProblem} mathematically. There are more variables to solve for than there are linearly independent equations meaning there is no unique solution for these variables. in \cite{horn1981determining}, This problem addressed by formulating the estimation of optical flow as a minimisation problem. where the vector field $(u, v)$ is presented as the minimiser for an energy function $J(u, v)$. this energy function is made up of the optical flow constraint based on brightness constancy, and another term based on the gradient of the flow. The resulting energy function is as follows:
+This equation exposes the aperture problem in \cref{fig:ApertureProblem} mathematically. There are more variables to solve for than there are linearly independent equations meaning there is no unique solution for these variables. in \cite{horn1981determining}, This problem addressed by formulating the estimation of optical flow as a minimisation problem. where the vector field $(u, v)$ is presented as the minimiser for an energy function $J(u, v)$. this energy function is made up of the optical flow constraint based on brightness constancy, and another term based on the gradient of the flow. The resulting energy function is as follows:
 \begin{equation}
 	J(u, v) = \int_{\Omega}(I_{x}u + I_{y}v + I_{t})^{2} + \alpha^2(|\nabla u|^{2} + |\nabla v|^{2})
 \end{equation}
@@ -175,9 +175,9 @@ where $\alpha$ is the weight of the smoothness of the resulting flow field.
 Horn and Schunck's optical flow algorithm was a huge step forward in computer vision research, although this algorithm is limited in that it typically can only estimate small motions, the method fails in the presence of large motion when the gradient of the image is not smooth enough \citep{meinhardt2013horn}.
 
 \subsubsection{Lucas - Kanade Optical Flow}
-Since its introduction in 1981, techniques pioneered by the Lucas-Kanade method have become some of the most widely used tools for in computer vision. The main idea behind the Lucas-Kanade method is image alignment, where a region in an image is translated and deformed to minimise the least squared difference between the region and the following frame \citep{lucasKanade20yearson}. Furthermore, the Lucas-Kanade method operates under the assumption that the flow is effectively constant in a small cluster of pixels, the method can then solve the optical flow equation for all the pixels in that neighbourhood using least squares regression. The Lucas-Kanade method improved on previous methods by using the spatial intensity gradient to find the disparity vector $h$, reducing the algorithms calculation time to $O(M^2log(N))$ for the average case \citep{rojas2010lucas}. The Lucas - Kanade Optical Flow algoithm is known as a sparce optical flow algorithm, calculating the pixel flow based on feature matching.
+Since its introduction in 1981, techniques pioneered by the Lucas-Kanade method have become some of the most widely used tools for in computer vision. The main idea behind the Lucas-Kanade method is image alignment, where a region in an image is translated and deformed to minimise the least squared difference between the region and the following frame \citep{lucasKanade20yearson}. Furthermore, the Lucas-Kanade method operates under the assumption that the flow is effectively constant in a small cluster of pixels, the method can then solve the optical flow equation for all the pixels in that neighbourhood using least squares regression. The Lucas-Kanade method improved on previous methods by using the spatial intensity gradient to find the disparity vector $h$, reducing the algorithms calculation time to $O(M^2log(N))$ for the average case \citep{rojas2010lucas}.
 
-The goal of Lucas-Kanade optical flow algorithm is to match a subset of pixels $\mathbf{T}(x)$ from an image at time $t_0$ to a subsequent template image $\mathbf{I}(x)$ at time $t_1$. The necessary movement of $\mathbf{T}(x)$ becomes the optical flow for that region. 
+The Lucas - Kanade Optical Flow algoithm is known as a sparce optical flow algorithm, calculating the pixel flow based on feature matching. The goal of Lucas-Kanade optical flow algorithm is to match a subset of pixels $\mathbf{T}(x)$ from an image at time $t_0$ to a subsequent template image $\mathbf{I}(x)$ at time $t_1$. The necessary movement of $\mathbf{T}(x)$ becomes the optical flow for that region. 
 
 Considering a frame $I(x, y)$, assuming only small motion occurs between the time step, The new image can be represented as $H(x, y) = I(x + \delta x, y + \delta y)$. Finally, by using a Taylor series expansion the Lucas-Kanade equation can be written as:
 \begin{equation}
@@ -196,14 +196,14 @@ Considering a frame $I(x, y)$, assuming only small motion occurs between the tim
 \end{equation}
 where $\delta x$ and $\delta y$ is the flow in thier respective directions.
 
-Similar to the horn and Schunk method in \cref{sec:HornSchunk}, assumptions must be made to solve this equation. the two main assumptions made to constrain the equation are, the brightness constancy, mentioned in \cref{sec:HornSchunk} and a \textit{spacial coherance} constraint. The spacial coherance encapulates the idea that there are regions within the image where all the pixels are moving relative to each other.
+Similar to the horn and Schunk method in \cref{sec:HornSchunk}, assumptions must be made to solve this equation. the two main assumptions made to constrain the equation are, the brightness constancy, mentioned in \cref{sec:HornSchunk} and a \textit{spacial coherance} constraint. The spacial coherance encapulates the idea that there are regions within the image where all the pixels are moving together, possibly coresponding to an object moving in the frame.
 
 \subsubsection{Farneback Optical flow}
 A more recent algorithm for calculationg optical flow is presented by Gunnar Farneback. This method is based on the quadratic polynomial expansion transform. The idea begind the Farneback algorithm is to model an image as a function by locally fitting a polynomial to the image at each pixel. The polynomial expansion allows a neighbourhood for each pixel to be aproximated \cite{farneback2003two}. The signal model used in the Farneback algorithm is given by:
 \begin{equation}
 	f(\mathbf{x}) \approx \mathbf{x}^{\top}\mathbf{A}\mathbf{x} + \mathbf{\vec{b}}^{\top} + c
 \end{equation}
-where $\mathbf{x}$ is the local pixel coordinates, $\mathbf{A}$ is a symetric matrix. A least squares fitting for the pixel nebourhood is then performed to find the coefficents. Due to theis polynomial being based on a window surrounding each pixel, there is a weighting applied making the function more sensitive to pixels closer to the centre of the window. For this reason the choise of the neibourhood size is an important consideration as it determins the scale of the features that this algorithm is sensitive to. \cref{fig:farnebackAlgorithm} shows the opperation of the Farneback algorithm as a one dimentional hystogram, where the height $y$ at each point represents the pixel intensity as in the 2-dimensional case and.
+where $\mathbf{x}$ is the local pixel coordinates, $\mathbf{A}$ is a symetric matrix $b$ is a vector adn $c$ a constant. A least squares fitting for the pixel nebourhood is then performed to find these coefficents. Due to the polynomial being based on a window surrounding each pixel, there is a weighting applied making the function more sensitive to pixels closer to the centre of the window. For this reason the choise of the neibourhood size is an important consideration as it determins the scale of the features that this algorithm is sensitive to. \cref{fig:farnebackAlgorithm} shows the opperation of the Farneback algorithm as a one dimentional hystogram, where the height $y$ at each point represents the pixel intensity as in the 2-dimensional case and.
 
 \begin{figure}[ht]\label{fig:farnebackAlgorithm}
     \begin{center}
@@ -223,7 +223,7 @@ The displacement $d$ can then be solved for through:
 \begin{equation}
 	d = -\frac{1}{2a_{1}}(b_{2}-b_{1})
 \end{equation}
-There is a probelm with this aproach on its own, that is this method will only work for movement that can be captured in the neibourhood chosen for the polynomial. However this issue can be resolved if dome information about the displacement is already known, for instance from a previous calculation of the algorithm. So rather than comparing two images at the same point, It is possible to compare the points based on an estimated displacement, and refine the results form there. Another method for dealing with large movements is a pyramydal aproach. This involves calculating the flow on a pair of lower resolution images where large movement apears small. This aproximation can then be refined by feeding the results forward to higher order pyramids \citep{learningOpenCV}.
+There is a probelm with this aproach on its own, that is this method will only work for movement that can be captured in the neibourhood chosen for the polynomial. However this issue can be resolved if some information about the displacement is already known, for instance from a previous calculation of the algorithm. So rather than comparing two images at the same point, It is possible to compare the points based on an estimated displacement, and refine the results form there. Another method for dealing with large movements is a pyramydal aproach. This involves calculating the flow on a pair of lower resolution images where large movement apears small. This aproximation can then be refined by feeding the results forward to higher order pyramids \citep{learningOpenCV}.
 
 \begin{figure}[ht]\label{fig:farnebackYosemite}
     \begin{center}
@@ -240,7 +240,6 @@ There is a probelm with this aproach on its own, that is this method will only w
 \end{figure}
 
 The Farneback algorithm was evaluated against a common optical flow evaluation dataset known as Lynn Quam’s Yosemite sequence. This dataset is a synthetic sequence of images with a known motion field, against which an algorithm can be evaluated. Furthermore, the dataset features discontinuity at oclution boundaries and depth variation. \cref{fig:farnebackYosemite} and \cref{fig:farnebackResults} show the results obtained by \cite{farneback2003two}.
-\subsubsection{What is Observable in Optical Flow}
 
 \subsection{Visual Navigation}\label{sec:visualNavigation}
 For the majority of autonomous rovers the navigation system is the key component to successfully carrying out its task. The rover collects data about its environment from sensors on the platform, attempting to extract meaningful information about its own state, such as its inclination and position relative to some reference. These sensors have typically included inertial measurment units (IMU), global positioning systems (GPS) and light detection and rainging (LiDAR) devices \citep{wang2015obstacle}.
@@ -252,22 +251,67 @@ The traditional way of designing an autonomous system is to create a cost functi
 
 Rather than defining a cost function that generates the policy for the robot, inverse optimal control uncovers the cost function that best explains demonstrated optimal behavior \citep{ratliffinverse}. This behavior is derived from from expert demonstrations of the optimal policy \citep{levine2012continuous}. In nature, there are many systems found that have all ready implemented a near optimal control stratergy for many visual tasks. The question that inverse optimal control answers is, how can we attempt to mimic the behavior seen nature for the purposes of our goals.
 
-To begin 
-
-\subsubsection{Biomimicry}
+\subsubsection{Biomimicry}\label{sec:biomimicry}
 Biology so often holds a wealth of inspiration for engineers. From the material science of the microstructures in a butterfly wing to the computational fluid dynamics of a Kingfisher diving into water \citep{benyus1997biomimicry}. visual sensors are found so frequently in nature, making it very productive to look at nature and tap into the eons of knowledge distilled by evolution.
 
-Due to the immense complexity of understanding and implementing a vission based navigation system, reaserchers have looked to honeybees for clues. Honeybees have been noticed to display superb agylity and remarkable compitency in navigationg their environment \citep{srinivasan2012biology}. Using an inverse optimal control framework, the interpritation that the honeybee has of its environment was investigated. Reaserchers at the university of queensland were able to devise and setup an experiment (\cref{fig:BeeExperiment}) with the goal of deducing how a bee negotialtes its environment.
+Due to the immense complexity of understanding and implementing a vision based navigation system, reaserchers have looked to honeybees for clues. Honeybees have been noticed to display superb agylity and remarkable compitency in navigating their environment \citep{srinivasan2012biology}. Using an inverse optimal control framework, the interpritation that the honeybee has of its environment was investigated. Reaserchers at the university of queensland were able to devise and setup an experiment (\cref{fig:BeeExperiment}) with the goal of deducing how a bee negotialtes its environment.
 
 \begin{figure}[ht]
     \begin{center}
         \includegraphics[width=.6\linewidth]{Figures/beeExperiment}
-        \caption{Inverse optimal control experiment used to identify the mechanism that bees use to maintain their distance to a wall}
+        \caption{Inverse optimal control experiment used to identify the mechanism that bees use to maintain their distance to a corridor wall}
         \label{fig:BeeExperiment}
     \end{center}
 \end{figure}
 
-\subsubsection{Trajectory Planning}
+In \cref{fig:BeeExperiment} the honeybee startes at one end of a corridor lined with a grating pattern. The pattern along the corridor can be horisontally translated, simulating a slower or faster image speed. \Citep{srinivasan2012biology} found that when the grating patterns were staitonary, the honeybees fly through the middle of the corridor \cref{fig:BeeExperiment}D. Interestingly, this was irrispective of the spatial period of the pattern. Furthermore, it was found that when one side of the grating pattern was translated, the honeybee would hug the wall that coresponded to the lowest apparent angular image velocity, again irrispective of the spatial period of the pattern. The conclution that \Citep{srinivasan2012biology} found was that the honeybees are attempting to equalise the apparent angular motion of the images either side of it. Further suggestiong that bees can accurately compute the speed of the image in each eye, mostly independent from the texture of the image.
+\newpage
+\subsubsection{Optical Flow for Visual Navigation}\label{sec:OpticalFlowforVisualNavigation}
+
+Determining motion and structure from visual cues is a major aspect of visual navigation. There have been many attempts to aquire such information from various artificial visual systems \citep{nelson1988finding}. Sterio vision is one such method usetd to compute depth information about the environment. This method uses a concept known as multiview geometry to reconstruct a depth map of the environemt surrounding the camera \citep{learningOpenCV}. Another way of visually determining the depth of an environment is by interpreting the blur of an image as depth iformation, this technique is known as depth from focus \citep{grossmann1987depth}.
+
+Like optical flow, these methos are commonly observed in nature. however, they are often seen in anamals with a highly developed visual cortex. This suggest that the comutational power required to mimic these techniques is not ideal for real time depth map extraction on mobile and lightweight computer hardware. In \cref{sec:biomimicry} the use of optical flow by insects was discussed. These insects have been found not to have the visual cortex that mamals have \citep{srinivasan2012biology}, suggesting the the optical flow based visual navigation techniques insects have evolved to use must be comutationally inexpencive.
+
+Determining motion from a plainar perspective projection of optic flow requires a dificult inversion of a non-linear transformation. A solution for this inversion ha been obtained by various authors, however these studies have relied on the fact that the motion field being used is accurate to withinn 1\%. \cite{nelson1988finding} presents the technique of projecting the percieved optic flow onto a view sphere. This method is able to produce the motion of the flow field unambiguously.
+
+The method presented by \cite{nelson1988finding} and further implemented by \cite{4209850} uses a \textit{derotation algorithm} to resolve the rotation on the view sphere. This algorithm uses a search based method to rotate the flow vectors looking for a solution that produces a distinct focus of expansion (FOE) and focus of contraction (FOC). The axis passing from the FOC to the FOE is the unambiguous direction of travel.
+
+Another method outlined by \cite{TimsFYP} implements optical flow on the view sphere such that the translational and rotational velovities can be estimated. Extending on work of \cite{nelson1988finding} and \cite{4209850}, the method that \cite{TimsFYP} outlines utelises all of the flow vectors on the view sphere to imply the state of the camera.
+
+\subsubsection{Optical Flow for Obstical Avoidance}
+Object detection and avoidance is a major aspect of navigationg an environment, and utelising optical flow information to achieve this has proven to be an exceptionally dificult problem. There have been various attempts to devise a robust and accurate interpritation of the flow field that can detect and avoid obstacles.
+
+One such obstacle avoidace method is presented by \cite{souhila2007optical}, where a \textit{ballance strategy} is implemented. The strategy uses the idea of balancing the amount of left and right side flow maintaining an equal relative distance from objects. This is dome by subdeviding the image into three vertical regions for which the flow can be balanced. \cite{souhila2007optical} implements their method on a ground based rover, demostrating the rover is able to traverse its environment without collisions. The commanded control action for this strategy is calculated as follows:
+\begin{equation}
+	\Delta (F_{L} - F_{R}) = \frac{\sum{\norm{\vec{W}_{L}}} - \sum{\norm{\vec{W}_{R}}}}{\sum{\norm{\vec{W}_{L}}} + \sum{\norm{\vec{W}_{R}}}}
+\end{equation}
+where $\Delta(F_{L} - F_{R})$ is the commanded torques on the left and right side of the rover, and $\sum{\norm{\vec{W}}}$ is the sum of the magnitudes of optic flow in the visual hemifields.
+
+\cite{wang2015obstacle} presents an improved balance strategy implemented on a quad rotor drone. Unlike the ground based balance method, the improved method devides the image into 9 reigons coresopnding to the 6 DOF of the quadrotor. Furthermore, information of \textit{time to contact} (TTC) is extracted from the optical flow. The actuation command for the improved balace strategy calculated as a combination of TTC and flow Ballance \cref{eq:ImprovedBalanceStrategy}.
+
+\begin{equation}\label{eq:ImprovedBalanceStrategy}
+	\begin{split}
+		Cmd &= \alpha Cmd_{IBS} + \beta Cmd_{TTC}\\
+	\end{split}
+\end{equation}
+where $Cmd_{IBS}$ is the command calculated by the balance strategy, $Cmd_{TTC}$ is the command calculated from TTC and $\alpha$ and $\beta$ are tuning parameters intended to add a weight to the different control allocation.
+
+According to the motion paralax theory, motion of an object far away will corespond to a smaller optical flow than that of a nearby object with the same abolute motion \citep{wang2015obstacle}. This observation is extremely useful for object avoidance, as it suggests that true depth is unnesessary to simply avoid obstacles. the apparent motion of an image can essentially, reveals all of the objects that are of important to avoid. for instatnce, if there is a portion of a flow field that has high flow, this must correspond to an object that is either far away but converging fast on the rover, or it is an object that is close enough to collide with.
+
+\cite{mccarthy2012unified} proposes a method for a divergence-based control schemes to planar surfaces of
+arbitrary orientation that enables the design of a unified control law for landing and docking. The aproach utelises the concept of maximum divergance (max-div) on the view sphere to regulate the aproach velocity in a docking or landing manuver. The following theorem was proven in \cite{mccarthy2012unified}.
+
+\textbf{Theorem 4.1}\textit{Given an approach angle $\theta_{nt} \in [0, \frac{\pi}{2})$ toward a planar surface, the maximum divergence induced by the relative motion between an infinite planar surface and view sphere will always occur halfway along the shortest arc of the great circle connecting} \cite{mccarthy2012unified}
+
+\begin{figure}[ht]
+    \begin{center}
+        \includegraphics[width=.6\linewidth]{Figures/max-div}
+        \caption{The maximum divergence property.\\(a) shows the location of max-div on the view sphere, (b) is the framework illustrating \textbf{Theorem 4.1} image credits \cite{mccarthy2012unified}}
+        \label{fig:ReferenceFrame}
+    \end{center}
+\end{figure}
+
+The experimental results in \cite{mccarthy2012unified} confirm that divergance of the optical flow field is a valid method for landing and docking. This concept of divergence of optical flow can similarly be used for obstacle avoidance, by finding the reigon of least flow and following that direction.
 
 \subsection{Reference Frames and Coordinate Systems}\label{sec:ReferenceFrames}
 In general, the motion of an object needs to be described relative to some coordinate system and the reference frame. Defined by \cite{3900Notes}, a reference frame is a perspective from which the motion is described by an observer. A reference frame can be defined by a set of at least 3 non-colinear points that are rigidly connected. The reference frames used in this project are $\mathcal{C}$, $\mathcal{B}$ and $\mathcal{N}$ for the camera, the vehicle (body) and the world frames respectively.
@@ -434,20 +478,21 @@ Using the transport theorem, the velocity of the spider relative to $\mathcal{O}
 \subsection{Kinematics of Vision}
 While discussing the motion of objects in a space, it is helpful to properly define a geometric definition for these points and the relative motion between them. Kinematics defines these such relationships. More specifically, kinematics defines the reference frame from which the motion of a point can be described and the transformation that associates this motion in a separate reference frame. These concepts will be used to describe the relative motion between a camera mounted on a vehicle in an environment.
 
-\subsection{Optical Flow on the View Sphere}\label{sec:SphericalFlow}
-As discussed in previous sections, optical flow used on a robotics platform is often used for navagational purposes
-\begin{figure}[ht]
+\subsubsection{Optical Flow on the View Sphere}\label{sec:SphericalFlow}
+
+In \cref{sec:OpticalFlowforVisualNavigation}, the concept of projecting optical flow onto a view sphere in order to better obtain the translational and rotational velocities of a camera in motion was introduced. This is the concept that was used to calculate the artificial optical flow in simulation. The following derivation is addapted from \cite{TimsFYP} and \cite{opticFlowLecture}
+
+\begin{figure}[ht]\label{fig:MeasurementModel}
     \begin{center}
         \includegraphics[width=.8\linewidth]{Figures/MeasurementModel}
-        \caption{Write something here}
-        \label{fig:MeasurementModel}
+        \caption{Projection of a point $P$ from a camera $C$ onto a unit sphere $S$ and its movement through time. adapted from \cite{TimsFYP}}
     \end{center}
 \end{figure}
 Assuming the viewsphere has a unit radius, the point $P$ can be projected onto the view sphere to point $S$ by:
 \begin{equation}\label{eq:pointOnSphere}
 	\vec{r}_{S/C} = \frac{\vec{r}_{P/C}}{\norm{\vec{r}_{P/C}}}
 \end{equation}
-Applying the concepts from \ref{sec:VectorDerivitives}, the time derivitive of $\vec{r}_{S/C}$ with respect to reference frame $\mathcal{N}$ can be taken: 
+Applying the concepts from \cref{sec:VectorDerivitives}, the time derivitive of $\vec{r}_{S/C}$ with respect to reference frame $\mathcal{N}$ can be taken: 
 \begin{equation}
 	\frac{{}^\mathcal{N}d\vec{r}_{S/C}}{dt} = \frac{{}^\mathcal{N}d}{dt}\left(\frac{\vec{r}_{P/C}}{\norm{\vec{r}_{P/C}}}\right)
 \end{equation}
@@ -545,14 +590,16 @@ As mentioned in \cref{sec:ReferenceFrames}, it is helpfull when creating a comut
 	\end{bmatrix}
 \end{equation}
 
-\begin{figure}[ht]
+\cref{fig:Unit_Movement} shows the resulting spherical flow of a camera moving in each degree of freedom.
+
+\begin{figure}[ht]\label{fig:Unit_Movement}
     \begin{center}
-        \includegraphics[width=.6\linewidth]{Figures/Unit_Movement}
-        \caption{Write something here}
-        \label{fig:Unit_Movement}
+        \includegraphics[width=.8\linewidth]{Figures/Unit_Movement}
+        \caption{Optical flow calulated from; Top row: A unit translation in x, y and z. Bottom row: a unit rotation about x, y and z}
     \end{center}
 \end{figure}
 
+\newpage
 \subsection{Camera Calibration}\label{sec:Background_cameraCal} %TODO: Pretty good, get someone to read
 Computer vision begins with the camera detecting light from a scene. This light has travelled from its source, reflecting from an object, through the camera lens, and is recorded on the image sensor. For these rays of light that make up an image to be useful for representing the real-world, the geometry that transforms these rays from the three-dimensional real world to a two-dimensional image plane must be understood; i.e. the transformation from world coordinates to image coordinates.
 
@@ -679,21 +726,46 @@ Two additional parameters $p_{1}$ and $p_{2}$ are introduced to minimally charac
 \end{equation}
 There are many other aspects within an average camera that cause image distortion, howerver these effects contribute a minor amount to the accuracy of measurements from an image so for this project will be assumed $0$. Both Matlab and Open CV based camera calibration rotines are implemented and evaluated in this project. The camera calibration routine for Matlab \textit{estimateCameraParameters();} returns an object containing the camera matrix \ref{eq:CameraMatrix}, radial distortion parameters \ref{eq:radialParameters} and tangental distortion parameters \ref{eq:tangentalParameters}, along with information about the calibration photos. When using \textit{Open CV}, these parametetrs are packaged into a \textit{distortion vector}. For this project, six radial distortion parameters were used to capture the distortion for a Go Pro Hero 7. Therefor the distortion vector from Open CV is organised as $(k_{1}, k_{2}, p_{2}, p_{1}, k_{3}, k_{4}, k_{5}, k_{6})$.
 From \cref{eq:radialParameters} and \cref{eq:tangentalParameters}, the \textit{Brown-Conrady model} is as follows:
-\begin{equation}
+\begin{equation}\label{eq:BrownConradymodel}
 	\begin{split}
 		u' &= u\left(\frac{1  +k_{1}r^{2} + k_{2}r^{4} + k_{3}r^{6}}{k_{4}r^{2} + k_{5}r^{4} + k_{6}r^{6}}\right) + 2p_{1}uv + p_{2}(r^{2} + 2u^{2})\\
 		v' &= v\left(\frac{1  +k_{1}r^{2} + k_{2}r^{4} + k_{3}r^{6}}{k_{4}r^{2} + k_{5}r^{4} + k_{6}r^{6}}\right)  + p_{1}(r^{2} + 2v^{2}) + 2p_{2}uv\\
 	\end{split}
 \end{equation}
 Now that the camera can be described mathematically through the intrinsic parameters and distortion parameters, pixel location in the image can be \textit{undistorted}. \Cref{fig:DistortionMovement} shows the movement of a subset of pixels from a GoPro Hero 7 image. Notice the movement of pixels in the centre of the image move far less than those further away radially.
+\newpage
 \begin{figure}[ht]
     \begin{center}
-        \includegraphics[width=.9\linewidth]{Figures/Matlab/DistortionMovement}
-        \caption{Shows the movement of a sample of pixels based on the parameters of a GoPro}
+        \includegraphics[width=1\linewidth]{Figures/Matlab/DistortionMovement}
+        \caption{Shows the movement of a sample of pixels based on the parameters of a GoPro Hero 7}
         \label{fig:DistortionMovement}
     \end{center}
 \end{figure}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\section{Obstacle Avoidance Cost Function}
+The obstacle avoidance algorithm presented in this report is largely based on the divergence of the optical flow field in an image. where the rover attempts to move in the direction of least flow. However, for the rover to be able to complete simple navigational tasks a target directon must be defined, and conciderend in the estimated optimal direction.
+
+A cost funtion that encases both a target vector $\vec{r}_{t}$ and avoidance vector $\vec{r}_{a}$ is proposed as follows:
+
+\begin{equation}
+	\begin{split}
+		J(x) &= \alpha D_{flow}(x) + \beta T(x)\\
+		x* &= arg\underset{(x)}{\mathrm{min}}J(x)
+	\end{split}
+\end{equation}
+
+where $x*$ is a unit vector from camera centre to the optimal direction, $D_{flow}$ is the divergence of the optical flow vector field, $T$ is the cost of deviating from a target vector ($\vec{r}_{t}$) and $\alpha$ and $\beta$ are weighting parameters.
+
+The cost $T$ for deviating from the target vector $\vec{r}_{t}$ was simply calculated by taking the vector dot product from each of the spherical flow direction vectors $\vec{r}_{S/P}$. Furthermore, the  the resulting cost function is show in \cref{fig:targetCost}.
+\begin{figure}[ht]
+    \begin{center}
+        \includegraphics[width=.8\linewidth]{Figures/Matlab/targetCost}
+        \caption{Caption}
+        \label{fig:targetCost}
+    \end{center}
+\end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section{Simulation in Unity}
@@ -756,7 +828,7 @@ void calculateControlTorque() {
 
 By utelising the in built physics engine of unity, velocity of the rover was able to be accurately and efficiently extracted from the scene. Both the lift Calculationd and the data was recorded within the \textbf{FixedUpdate()} function. This function is built in to unity, and allows processes to be run at exatly $30$ frames per second. This is the function that accomodates all of the force calculations, in order to maintain a fixed timestep between adding forces to the sumulated rover.
 
-Depth information from the simulated environment is extracted using raycasts. Typically used for hit detection in shooter games, the \textbf{Physics.Raycast()} function projects a ray into the scene in a defined direction and intersects an object in the scene. Depth can then be recovered from the origen of the ray to the object it has intersected with. The raycast functionality of the Unity engine was utelised by first defining a set of direction vectors along which The depth of the environment could be calculated. These direction vectors were created by itterating through a double for loop that calculated discretised euler angels of a sphere. The calculatins for the raycast direction vectors are seen in \cref{lst:raycastSphere}
+Depth information from the simulated environment is extracted using raycasts. Typically used for hit detection in shooter games, the \textbf{Physics.Raycast()} function projects a ray into the scene in a defined direction and intersects an object in the scene. Depth can then be recovered from the origen of the ray to the object it has intersected with. The raycast functionality of the Unity engine was utelised by first defining a set of direction vectors along which the depth of the environment could be calculated. These direction vectors were created by itterating through a double for loop that calculated discretised euler angels of a sphere. The calculatins for the raycast direction vectors are seen in \cref{lst:raycastSphere}
 
 \begin{lstlisting}[
     language=C,
@@ -781,14 +853,53 @@ for (int ii = 1; ii < rX; ii++)
 }
 \end{lstlisting}
 Where \textbf{fovX} and \textbf{fovY} define the $x, y$ field of view and where \textbf{rX} and \textbf{rY} define $x, y$ resoulution for the simulated camera. 
+
+A data stream to a text file is run during the simulation. The data that was collected from each simulation included;
+\begin{itemize}
+	\item Vechical Pose
+	\item Vehical Velocity
+	\item \textbf{Inverse} depth of objects (Map)
+\end{itemize}
+\subsection{Unty Scenes}
+The Unity game engine has the ability to create multiple scenes In order to evaluate the divergence base obstacle avoidance algorithm, multiple senarios were created within the Unity environment.
+
+\begin{figure}[ht]
+	\subfloat[][Red - "spherical" lens
+
+				Blue - paraboloidal lens]
+				{\includegraphics[width=.45\linewidth]{Figures/Coridor_1}}
+	\subfloat[Radial distortion is most clear on square objects]{\includegraphics[width=.45\linewidth]{Figures/Coridor_2}}
+	\caption{Radial distortion also known as \textit{Barrel Distortion}. The farther from the centre a ray enters, the larger the barrel distortion bends it.}	
+	\label{fig:RadialDistortion}
+\end{figure}
+
+\begin{figure}[ht]
+	\subfloat[][Red - "spherical" lens
+
+				Blue - paraboloidal lens]
+				{\includegraphics[width=.45\linewidth]{Figures/aproaching_1}}
+	\subfloat[Radial distortion is most clear on square objects]{\includegraphics[width=.45\linewidth]{Figures/aproaching_2}}
+	\caption{Radial distortion also known as \textit{Barrel Distortion}. The farther from the centre a ray enters, the larger the barrel distortion bends it.}	
+	\label{fig:RadialDistortion}
+\end{figure}
+
+\begin{figure}[ht]
+	\subfloat[][Red - "spherical" lens
+
+				Blue - paraboloidal lens]
+				{\includegraphics[width=.45\linewidth]{Figures/HorizontalObstacle_1}}
+	\subfloat[Radial distortion is most clear on square objects]{\includegraphics[width=.45\linewidth]{Figures/HorizontalObstacle_2}}
+	\caption{Radial distortion also known as \textit{Barrel Distortion}. The farther from the centre a ray enters, the larger the barrel distortion bends it.}	
+	\label{fig:RadialDistortion}
+\end{figure}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
-\section{Optical Flow - Simulation}
-After gathering the 
+\section{Spherical Flow - Simulation}
 
 \begin{figure}[ht]
     \begin{center}
-        \includegraphics[width=.6\linewidth]{Figures/SphericalFlowResultsExample}
+        \includegraphics[width=1\linewidth]{Figures/SphericalFlowResultsExample}
         \caption{Write something here}
         \label{fig:Unit_Movement}
     \end{center}
@@ -826,9 +937,45 @@ Outlined in \cref{sec:Background_cameraCal}, the camera intrinsic parameters and
 \subsection{Calibration Tool}
 To calibrate the GoPro Hero 7 for in this project, A camera calibration tool was written in C\# using WPF as a graphical user interface(see \Cref{app:calibrationTool})). After extracting a collection of images from the calibration video as outlined in \cref{sec:CalibrationBoards}. These image are input into the calibration tool ready to be processed. The quality of the calibration images plays a large part in the resulting accuracy of the calibration routine. Using the calibration tool, the best frames from a list of frames can be selected to be calibrated against. An automatic function can also be chosen that selects 12 images with visable corners at random.
 
-\subsection{Calibration Results}
-For the purpose of evaluating the best tool for calibrating a camera, both the C\# openCV library and Mathlab's \textit{Vision Toolbox} were used. The calibration routine in Matlab
+\subsection{Undistorting Camera Points}
+Once the camera intrinsic matrix and distortion parametres were found, an algorithm to implement \cref{eq:BrownConradymodel} needed to be written. This was due to the matlab implementation having a lot of overhead therefore running unnesessarily slow. The Brown Conrady model is based on a taylor series characterising the distortion of the lense, therefor it is necessary to run multiple itterations on the distorted points to obtain the most optimal undistorted coordinates possible.
 
+\begin{lstlisting}[
+    language=C,
+	float=h,
+	numbers=none,
+    xleftmargin=1cm,
+    frame=shadowbox,
+	caption={Mex'd Undistort points function}
+	\label{lst:raycastSphere}
+	]
+void calculateUndistortion(double *xOut, double *yOut, double x,...
+double y, double *k, double *p)
+{
+	int ii = 0;
+	double x0 = x;
+	double y0 = y;
+	double r2, r4, r6;
+	double iRaidDist; // Inverse radial distortion
+	double tangDistX; // Tangental distortion in the x direction
+	double tangDistY; // Tangental distortion in the y direction
+	for(ii = 0; ii < ITTER; ii++) {
+		r2 = x * x + y * y;
+		r4 = r2 * r2;
+		r6 = r4 * r2;
+		iRaidDist=(1+(k[5]*r6+k[4]*r4+k[3]*r2))/(1+(k[2]*r6+k[1]*r4+k[0]*r2));
+		tangDistX=2 * p[0] * x * y + p[1] * (r2 + 2 * x * x);
+		tangDistY=p[0] * (r2 + 2 * y * y) + 2 * p[1] * x * y;
+
+		x = (x0 - tangDistX) * iRaidDist;
+		y = (y0 - tangDistY) * iRaidDist;
+	}
+	*xOut = x;
+	*yOut = y;
+}
+\end{lstlisting}
+
+For the purpose of determining the best camera distortion model, both a $3^{rd}$ order and a $6^{th}$ order radial distortion polynomial was fit to the GoPro hero 7.
 
 \begin{figure}[ht]
     \begin{center}
@@ -851,17 +998,10 @@ For the purpose of evaluating the best tool for calibrating a camera, both the C
         \label{fig:Image_on_ViewSphere}
     \end{center}
 \end{figure}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
-\section{Vector Field Divergence for Object Avoidance}
-\begin{figure}[ht]
-    \begin{center}
-        \includegraphics[width=.8\linewidth]{Figures/Matlab/Avoidance_Algorithm}
-        \caption{Caption}
-        \label{fig:Avoidance_Algorithm}
-    \end{center}
-\end{figure}
-
+\section{Simulation Results}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section{Discussion}

@@ -1,8 +1,8 @@
-function [dBrQC, pFlow] = simulateOpticalFlow(nu, eta, M, params)
+function dBrQC = simulateOpticalFlow(nu, eta, M, params)
 
 sigX  = params.sigX;
 sigY = params.sigY;
-% 
+
 noise = zeros(3, 1);
 
 noise(1) = sigX*randn(1);
@@ -25,12 +25,7 @@ end
 
 % nT = RTS*noise;
 dBrQC = skew(rQC)*[rhoPC*skew(rQC), eye(3)]*[vCN; omegaBN];
+
 yTS = R'*dBrQC + noise;
 dBrQC = R*yTS;
-% 
-% pFlow = yTS;
-
-pFlow = dBrQC;
-pFlow = pFlow/norm(pFlow);
-pFlow = pFlow * norm(dBrQC);
 

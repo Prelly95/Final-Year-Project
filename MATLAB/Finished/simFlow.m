@@ -1,20 +1,29 @@
+%% Setup
+
 clc;
 clear;
 close all;
 
-%% Setup
-% Data for Simulation
-
-% !!!!!!!!!! Good Data !!!!!!!!!!!!
+% This data set shows the vehicle following the corridor
+% 724 frames - Takes aproximately 
 % lidarData = dlmread("UnityData/Corridor/Avoiding/lidar.txt");
 % kinematicData = dlmread("UnityData/Corridor/Avoiding/velocity.txt");
+
+% frames - Takes aproximately
 % lidarData = dlmread("UnityData/Corridor/lidar.txt");
 % kinematicData = dlmread("UnityData/Corridor/velocity.txt");
-lidarData = dlmread("UnityData/ApproachingTower/DirectlyAt/lidar.txt");
-kinematicData = dlmread("UnityData/ApproachingTower/DirectlyAt/velocity.txt");
-% !!!!!!!!!! Good Data ! !!!!!!!!!!!
 
+% frames - ta
+% lidarData = dlmread("UnityData/ApproachingTower/DirectlyAt/lidar.txt");
+% kinematicData = dlmread("UnityData/ApproachingTower/DirectlyAt/velocity.txt");
 
+% lidarData = dlmread("UnityData/VerticalAvoid/lidar.txt");
+% kinematicData = dlmread("UnityData/VerticalAvoid/velocity.txt");
+
+lidarData = dlmread("UnityData/lidar.txt");
+kinematicData = dlmread("UnityData/velocity.txt");
+
+disp("Formatting data collected from unity");
 [nu, Map, param] = formatUnityData(lidarData, kinematicData);
 nuS = nu;
 
@@ -57,19 +66,18 @@ filePattern = fullfile(frameDir, '*.png');
 fileNames = dir(filePattern);
 frameArray = cell(1, N);
 
-% The ratio between these two parameters dictates how tight the vehicle can
-% turn
+% The ratio between these two parameters dictates how tight the vehicle turns
 
-devWeight = 1.3; % Weight of deviationg from target direction
-flowWeight = 1; % weight of the divergence
-cutOff = 4;
+param.devWeight = 1.3; % Weight of deviationg from target direction
+param.flowWeight = 1; % weight of the divergence
+param.cutOff = 4; % how many standard deviations of the flow divergence is culled
 
 %calculate optic flow
 for kk = 1:param.frames
     for ii = 1:param.resX
         for jj = 1:param.resY
-            [G, yTangentBundle(ii, jj, :)] = simulateOpticalFlow(nu(:, kk), eta(:, ii, jj), Map(ii, jj, kk), param);
-%             [G, yTangentBundle(ii, jj, :)] = simulateOpticalFlow([0;0;1;0;0;0], eta(:, ii, jj), 1, param);
+            G = simulateOpticalFlow(nu(:, kk), eta(:, ii, jj), Map(ii, jj, kk), param);
+%             G = simulateOpticalFlow([0;0;1;0;0;0], eta(:, ii, jj), 1, param); % for testing 
             u(ii, jj, kk) = G(1);
             v(ii, jj, kk) = G(2);
             w(ii, jj, kk) = G(3);
@@ -77,22 +85,11 @@ for kk = 1:param.frames
             targetCost(ii, jj) = dot(eta(:, ii, jj), target);
         end
     end
-    % Calculate the divergence of the flow vectors
-    cullDiv = abs(divergence(a, b, yTangentBundle(:, :, 1), yTangentBundle(:, :, 2)));
     
-    div = cullDiv.*(cullDiv < cutOff*std(std(cullDiv)));
+    Gf(:, :, 1) = u(:, :, kk);
+    Gf(:, :, 2) = v(:, :, kk);
     
-    % Normalise the divergence magintudes
-    divCost = normaliseMatrix(div);
-    targetCost = normaliseMatrix(targetCost);
-    % Calculate the cost of moving in that direction
-    totalCost = flowWeight*divCost - devWeight *targetCost;
-    minCost = min(totalCost(:));
-    [row,col] = find(totalCost == minCost);
-    movement(:, kk) = eta(:, row(1), col(1));
-    
-    costHist(:, :, kk) = totalCost;
-    divHist(:, :, kk) = divCost;
+    [costHist(:, :, kk), movement(:, kk)] = directionCost(Gf, eta, targetCost, param);
     
     disp(kk);
 
@@ -100,7 +97,6 @@ end
 
 
 %% plot the actual data
-
 fig = figure;
 img = imread('UnityData\Corridor\Corridor.png');
 s = 2; %Scale down optic flow vector plotting
@@ -120,7 +116,6 @@ v0(:, :) = eta(3, :, :);
 w0(:, :) = eta(1, :, :);
 
 divPlot = surf(u0, v0, w0, costHist(:, :, 5), 'LineStyle','none', 'FaceAlpha', '1');
-% flowPlot = quiver3(u0(1:s:end, 1:s:end) ,v0(1:s:end, 1:s:end) ,w0(1:s:end, 1:s:end), zeros(size(u0(1:s:end, 1:s:end))), zeros(size(u0(1:s:end, 1:s:end))), zeros(size(u0(1:s:end, 1:s:end))), 2, 'k');
 
 targetDir = quiver3(0, 0, 0, 0, 1, 0, 0,'r'); % Target direction
 avoidDir = quiver3(0, 0, 0, 0, 1, 0, 0, 'b');
@@ -141,10 +136,6 @@ for ii = 1:(param.frames)
         'wdata', movement(1, ii) ...
     );
 
-%     set(flowPlot,  'udata', u(1:s:end, 1:s:end, ii),... 
-%         'vdata', v(1:s:end, 1:s:end, ii),...
-%         'wdata', w(1:s:end, 1:s:end, ii) ...
-%     );
     set(divPlot, 'cdata', costHist(:, :, ii));
     disp(ii);
     pause(0.02);
